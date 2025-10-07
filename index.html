@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UK E-Sports League - Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6C5CE7;
+            --secondary-color: #00D2D3;
+            --dark-bg: #0A0E27;
+            --darker-bg: #060818;
+            --accent-color: #FF6B6B;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--dark-bg) 0%, var(--darker-bg) 100%);
+            color: white;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Loading Screen */
+        .loader-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--darker-bg);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+
+        .loader {
+            position: relative;
+            width: 150px;
+            height: 150px;
+        }
+
+        .loader-circle {
+            position: absolute;
+            border: 3px solid transparent;
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            animation: rotate 1.5s linear infinite;
+        }
+
+        .loader-circle:nth-child(1) {
+            width: 150px;
+            height: 150px;
+            animation-delay: 0s;
+        }
+
+        .loader-circle:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 15px;
+            left: 15px;
+            border-top-color: var(--secondary-color);
+            animation: rotate 1.5s linear reverse infinite;
+            animation-delay: 0.2s;
+        }
+
+        .loader-circle:nth-child(3) {
+            width: 90px;
+            height: 90px;
+            top: 30px;
+            left: 30px;
+            border-top-color: var(--accent-color);
+            animation-delay: 0.4s;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Animated Particle Background */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        /* Animated Gradient Background */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(270deg, #0A0E27, #1a1a3e, #0A0E27, #060818);
+            background-size: 800% 800%;
+            animation: gradientShift 20s ease infinite;
+            z-index: -2;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Navbar with slide down animation */
+        .navbar {
+            background: rgba(10, 14, 39, 0.95) !important;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(108, 92, 231, 0.3);
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        /* Navigation links with stagger animation */
+        .navbar-nav .nav-item {
+            opacity: 0;
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+
+        .navbar-nav .nav-item:nth-child(1) { animation-delay: 0.1s; }
+        .navbar-nav .nav-item:nth-child(2) { animation-delay: 0.2s; }
+        .navbar-nav .nav-item:nth-child(3) { animation-delay: 0.3s; }
+        .navbar-nav .nav-item:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .nav-link {
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            transform: translateX(-50%);
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover::after {
+            width: 80%;
+        }
+
+        /* Hero Section with Advanced Animations */
+        .hero-section {
+            padding: 100px 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientAnimation 3s ease infinite, glow 2s ease-in-out infinite alternate;
+            display: inline-block;
+        }
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes glow {
+            from { 
+                filter: drop-shadow(0 0 10px rgba(108, 92, 231, 0.5));
+                transform: scale(1);
+            }
+            to { 
+                filter: drop-shadow(0 0 25px rgba(0, 210, 211, 0.8)) drop-shadow(0 0 35px rgba(108, 92, 231, 0.5));
+                transform: scale(1.02);
+            }
+        }
+
+        /* Typing Effect */
+        .typing-text {
+            display: inline-block;
+            overflow: hidden;
+            border-right: 3px solid var(--secondary-color);
+            white-space: nowrap;
+            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: var(--secondary-color); }
+        }
+
+        /* Floating Animation for Cards */
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(108, 92, 231, 0.3);
+            transition: all 0.3s;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+            border-radius: 15px;
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s;
+            animation: borderRotate 3s linear infinite;
+        }
+
+        @keyframes borderRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 20px 50px rgba(108, 92, 231, 0.5);
+            animation: float 2s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(-10px) scale(1.05); }
+            50% { transform: translateY(-15px) scale(1.05); }
+        }
+
+        /* 3D Tilt Effect on Cards */
+        .tilt-card {
+            transform-style: preserve-3d;
+            transition: transform 0.3s;
+        }
+
+        .icon-feature {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: iconPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Animated Button */
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            padding: 12px 30px;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(108, 92, 231, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(108, 92, 231, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(108, 92, 231, 0); }
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn-primary:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(108, 92, 231, 0.5);
+        }
+
+        /* Statistics Section with Counter Animation */
+        .stats-section {
+            background: rgba(108, 92, 231, 0.1);
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 3rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stats-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(108, 92, 231, 0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 1.5rem;
+            transition: transform 0.3s;
+        }
+
+        .stat-box:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--secondary-color);
+            display: inline-block;
+            animation: numberGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes numberGlow {
+            from { text-shadow: 0 0 10px rgba(0, 210, 211, 0.5); }
+            to { text-shadow: 0 0 20px rgba(0, 210, 211, 0.8), 0 0 30px rgba(0, 210, 211, 0.5); }
+        }
+
+        .stat-label {
+            color: #B8BCC8;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* Glitch Effect for Hero Title */
+        .glitch {
+            position: relative;
+        }
+
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .glitch::before {
+            animation: glitch-1 0.3s infinite;
+            color: var(--primary-color);
+            z-index: -1;
+        }
+
+        .glitch::after {
+            animation: glitch-2 0.3s infinite;
+            color: var(--secondary-color);
+            z-index: -2;
+        }
+
+        @keyframes glitch-1 {
+            0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
+            20% { clip-path: inset(30% 0 40% 0); transform: translate(-2px, 2px); }
+            40% { clip-path: inset(60% 0 20% 0); transform: translate(2px, -2px); }
+            60% { clip-path: inset(10% 0 80% 0); transform: translate(-2px, 2px); }
+            80% { clip-path: inset(50% 0 30% 0); transform: translate(2px, -2px); }
+        }
+
+        @keyframes glitch-2 {
+            0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
+            20% { clip-path: inset(50% 0 30% 0); transform: translate(2px, 2px); }
+            40% { clip-path: inset(20% 0 60% 0); transform: translate(-2px, 2px); }
+            60% { clip-path: inset(80% 0 10% 0); transform: translate(2px, -2px); }
+            80% { clip-path: inset(40% 0 30% 0); transform: translate(-2px, -2px); }
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-indicator i {
+            font-size: 2rem;
+            color: var(--secondary-color);
+            opacity: 0.7;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            .feature-card {
+                margin-bottom: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loader-wrapper" id="loader">
+        <div class="loader">
+            <div class="loader-circle"></div>
+            <div class="loader-circle"></div>
+            <div class="loader-circle"></div>
+        </div>
+    </div>
+
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-gamepad"></i> UK E-SPORTS LEAGUE
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html"><i class="fas fa-home"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="register_form.html"><i class="fas fa-user-plus"></i> Register</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="search_form.php"><i class="fas fa-search"></i> Search</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="admin_login.html"><i class="fas fa-lock"></i> Admin</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <h1 class="hero-title glitch" data-text="UK E-Sports League" data-aos="zoom-in" data-aos-duration="1500">
+                UK E-Sports League
+            </h1>
+            <div data-aos="fade-up" data-aos-delay="500">
+                <p class="lead mb-4 typing-text">Join the ultimate gaming championship across the UK!</p>
+            </div>
+            <div data-aos="fade-up" data-aos-delay="700">
+                <a href="register_form.html" class="btn btn-primary btn-lg">
+                    <i class="fas fa-trophy"></i> Register Now
+                </a>
+            </div>
+            <div class="scroll-indicator">
+                <i class="fas fa-chevron-down"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mb-4" data-aos="fade-right" data-aos-duration="1000" data-aos-delay="100">
+                <div class="feature-card tilt-card">
+                    <div class="icon-feature">
+                        <i class="fas fa-gamepad"></i>
+                    </div>
+                    <h3>Tournament Format</h3>
+                    <p>10 pop-up tournaments across major UK cities</p>
+                    <p>Each tournament lasts 3 days with high-tech gaming setups</p>
+                    <p>Compete for prizes in age, gender, and team categories</p>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300">
+                <div class="feature-card tilt-card">
+                    <div class="icon-feature">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h3>National Finals</h3>
+                    <p>Winners from each city advance to the national championship</p>
+                    <p>Battle for the title of UK E-Sports Champion</p>
+                    <p>Amazing prizes and recognition await!</p>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="500">
+                <div class="feature-card tilt-card">
+                    <div class="icon-feature">
+                        <i class="fas fa-gift"></i>
+                    </div>
+                    <h3>Exclusive Merchandise</h3>
+                    <p>Register to receive exclusive event merchandise</p>
+                    <p>Limited edition gaming gear and apparel</p>
+                    <a href="register_form.html" class="btn btn-primary mt-3">Get Merchandise</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Section -->
+        <div class="stats-section" data-aos="zoom-in" data-aos-duration="1500">
+            <div class="row">
+                <div class="col-md-3" data-aos="fade-up" data-aos-delay="100">
+                    <div class="stat-box">
+                        <div class="stat-number" data-target="10">0</div>
+                        <div class="stat-label">Cities</div>
+                    </div>
+                </div>
+                <div class="col-md-3" data-aos="fade-up" data-aos-delay="200">
+                    <div class="stat-box">
+                        <div class="stat-number" data-target="500">0</div>
+                        <div class="stat-label">Players</div>
+                    </div>
+                </div>
+                <div class="col-md-3" data-aos="fade-up" data-aos-delay="300">
+                    <div class="stat-box">
+                        <div class="stat-number" data-target="30">0</div>
+                        <div class="stat-label">Days of Gaming</div>
+                    </div>
+                </div>
+                <div class="col-md-3" data-aos="fade-up" data-aos-delay="400">
+                    <div class="stat-box">
+                        <div class="stat-number" data-target="50">0</div>
+                        <div class="stat-label">Prize Pool (£K)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize AOS (Animate On Scroll)
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+
+        // Loading screen
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.getElementById('loader').style.opacity = '0';
+                document.getElementById('loader').style.visibility = 'hidden';
+            }, 1500);
+        });
+
+        // Animated particle background
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = Math.random() * 3 - 1.5;
+                this.speedY = Math.random() * 3 - 1.5;
+                this.color = Math.random() > 0.5 ? '#6C5CE7' : '#00D2D3';
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
+
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.closePath();
+                ctx.fill();
+            }
+        }
+
+        const particles = [];
+        for (let i = 0; i < 100; i++) {
+            particles.push(new Particle());
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+
+            // Connect nearby particles
+            particles.forEach((p1, index) => {
+                particles.slice(index + 1).forEach(p2 => {
+                    const dx = p1.x - p2.x;
+                    const dy = p1.y - p2.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 100) {
+                        ctx.strokeStyle = `rgba(108, 92, 231, ${0.2 * (1 - distance / 100)})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(p1.x, p1.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                });
+            });
+
+            requestAnimationFrame(animateParticles);
+        }
+
+        animateParticles();
+
+        // Resize canvas on window resize
+        window.addEventListener('resize', function() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Counter Animation
+        const counters = document.querySelectorAll('.stat-number');
+        const speed = 200;
+
+        const animateCounters = () => {
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                const count = +counter.innerText;
+                const inc = target / speed;
+
+                if (count < target) {
+                    counter.innerText = Math.ceil(count + inc);
+                    setTimeout(animateCounters, 10);
+                } else {
+                    counter.innerText = target + (counter.parentElement.querySelector('.stat-label').innerText.includes('Prize') ? '' : '+');
+                }
+            });
+        };
+
+        // Start counter animation when scrolled into view
+        const observerOptions = {
+            threshold: 0.5
+        };
+
+        const observerCallback = (entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounters();
+                    observer.unobserve(entry.target);
+                }
+            });
+        };
+
+        const observer = new IntersectionObserver(observerCallback, observerOptions);
+        const statsSection = document.querySelector('.stats-section');
+        if (statsSection) {
+            observer.observe(statsSection);
+        }
+
+        // 3D Card Tilt Effect
+        const cards = document.querySelectorAll('.tilt-card');
+        
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = (y - centerY) / 10;
+                const rotateY = (centerX - x) / 10;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(20px)`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0)';
+            });
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Add parallax effect on scroll
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallax = document.querySelector('.hero-section');
+            if (parallax) {
+                parallax.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+    </script>
+</body>
+</html>
